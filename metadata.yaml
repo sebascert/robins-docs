@@ -1,0 +1,14 @@
+title: <title>
+subtitle: <subtitle>
+author:
+- name: <first author>
+#- name: <second author>
+
+lang: en
+
+mainfont: Arial
+fontsize: 12pt
+
+toc: true
+toc-depth: 2
+numbersections: true
