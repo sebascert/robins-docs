@@ -51,6 +51,7 @@ cover_page: true
 include_all_sources: true
 # defines the rendering order for the given sources
 # if include_all_sources is set to false, only include this sources
+# provide sources relative to src/ i.e. source.md, not src/source.md
 sources:
 #- source1
 #- source2
