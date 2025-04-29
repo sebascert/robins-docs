@@ -16,7 +16,11 @@ Document Compiler requires [pandoc](https://pandoc.org/installing.html) and
 Clone the repo:
 
 ```bash
-git clone --no-checkout https://github.com/sebascert/doc-compiler.git <your-document>
+your_doc=<your document>
+git clone https://github.com/sebascert/doc-compiler.git "$your_doc"
+cd "$your_doc"
+git checkout --orphan doc
+git commit -am "init"
 ```
 
 Add your document contents to `src/` in markdown files, then compile with:
