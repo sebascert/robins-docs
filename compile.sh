@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
+# Compiles document with given configurations
+
+set -euo pipefail
+
 # constants
 script_dir=$(readlink -f "$0" | xargs dirname)
-cd "$script_dir" || exit 1
+
+cd "$script_dir" || {
+    echo "Error: unable to enter scritp's parent directory"
+    echo "Error: script dir: $script_dir"
+    exit 1
+} >&2
 
 source_dir="src"
 output_dir="out"
@@ -10,117 +19,95 @@ output_dir="out"
 config="config.yaml"
 metadata="metadata.yaml"
 
-cover_page_file="$source_dir/cover.md"
+coverpage_path="$source_dir/cover.md"
 
 # missing file checks
-if [ ! -f "$metadata" ]; then
-    echo "missing $metadata" >&2
-fi
+[ -r "$metadata" ] || {
+    echo "Error: unable to access $metadata"
+    exit 1
+} >&2
 
-if [ ! -f "$config" ]; then
-    echo "missing $config" >&2
-fi
+[ -r "$config" ] || {
+    echo "Error: unable to access $config"
+    exit 1
+} >&2
 
-# retrieves key from config or prints missing key error
-getkey() {
-    local key=$1
-    local file=$2
-
-    local type
-    type=$(yq -r ".${key} | type" "$file")
-
-    case "$type" in
-        array)
-            mapfile -t _getkey_result < <(yq -r ".${key}[]" "$file" | grep -v null)
-            ;;
-        null)
-            _getkey_result=()
-            ;;
-        *) # scalar (string, bool, number, etc.)
-            _getkey_result=()
-            _getkey_result+=("$(yq -r ".${key}" "$file")")
-            ;;
-    esac
-}
+# retrieve configurations
 
 # output filename
-getkey output_filename "$config"
-output_filename="${_getkey_result[0]}"
-
-if [ -z "$output_filename" ]; then
-    echo "output_filename is empty" >&2
+output_filename=$(./getkey.sh mandatory string output_filename "$config") || exit 1
+[ -z "$output_filename" ] && {
+    echo "Error: output_filename is empty"
     exit 1
-fi
-
-output="$output_dir/$output_filename"
+} >&2
 
 # cover page
-getkey cover_page "$config"
-cover_page_key="${_getkey_result[0]}"
-case "$cover_page_key" in
-    true)
-        cover_page="$cover_page_file"
-        ;;
-    false)
-        cover_page=""
-        ;;
-    *)
-        echo "cover_page has unexpected value: $cover_page_key" >&2
-        ;;
-esac
+coverpage_key=$(./getkey.sh mandatory bool cover_page "$config") || exit 1
+if (( coverpage_key == 1 )); then
+    [ -r "$coverpage_path" ] || {
+        echo "Error: unable to access $coverpage_path"
+        exit 1
+    } >&2
+    coverpage="$coverpage_path"
+else
+    coverpage=""
+fi
 
 # sources
-getkey 'sources' "$config"
-listed_sources=("${_getkey_result[@]}")
+mapfile -d '' -t listed_sources < <(./getkey.sh optional array sources "$config") || exit 1
 
-# append src dir to listed sources and check missing sources
+# append source dir to listed sources
 for i in "${!listed_sources[@]}"; do
-    src="$source_dir/${listed_sources[$i]}"
-    listed_sources[i]="$src"
-
-    if [ ! -f "$src" ]; then
-        echo "missing listed source '$src'" >&2
-        exit 1
-    fi
+    source="$source_dir/${listed_sources[$i]}"
+    listed_sources[i]="$source"
 done
 
-listed_sources=("$cover_page" "${listed_sources[@]}")
+# validate listed sources
+declare -A listed_sources_set
+for source in "${listed_sources[@]}"; do
+    [ -n "${listed_sources_set[$source]-}" ] && {
+        echo "Warning: repeated listed source '$source'"
+        continue
+    }
+    [ -r "$source" ] || {
+        echo "Warning: unable to access listed source '$source'"
+        listed_sources_set[$source]=1
+        continue
+    } >&2
+    listed_sources_set[$source]=0
+done
 
-# include all
-getkey include_all_sources "$config"
-include_all_sources_key="${_getkey_result[0]}"
-
-case "$include_all_sources_key" in
-    true)
-        all_sources=$(find "$source_dir" -name '*.md')
-
-        declare -A listed_sources_set
-        for src in "${listed_sources[@]}"; do
-            listed_sources_set["$src"]=1
-        done
-
-        for src in $all_sources; do
-            if  [[ -z "${listed_sources_set["$src"]}" ]]; then
-                listed_sources+=("$src")
-            fi
-        done
-        ;;
-    false)
-        ;;
-    *)
-        echo "include_all_sources has unexpected value: $include_all_sources_key" >&2
-        ;;
-esac
-
-if [ ! -d "$output_dir" ]; then
-    mkdir -p "$output_dir"
+# include all sources
+include_all_sources_key=$(./getkey.sh mandatory bool include_all_sources "$config") || exit 1
+if (( include_all_sources_key == 1 )); then
+    mapfile -t listed_sources < <(find "$source_dir" -name '*.md')
+else
+    for source in "${listed_sources[@]}"; do
+        (( listed_sources_set[$source] == 0 )) || {
+            echo "Error: unable to access listed source '$source'"
+            exit 1
+        } >&2
+    done
 fi
 
-if [[ ${#listed_sources[@]} -eq 0 && -z "$cover_page" ]]; then
-    echo "nothing to do" >&2
-    exit 1
-fi
+# insert coverpage into listed sources
+[ -n "$coverpage" ] && listed_sources=("$coverpage" "${listed_sources[@]}")
 
-echo "compiling sources:"
-echo  "${listed_sources[@]}"
+# status feedback
+
+[ ${#listed_sources[@]} -eq 0 ] && {
+    echo "nothing to do"
+    exit 2
+} >&2
+
+{
+    echo "compiling sources:"
+    echo "${listed_sources[@]}"
+} >&2
+
+# compile documment
+
+mkdir -p "$output_dir"
+
+output="$output_dir/$output_filename"
 pandoc --metadata-file="$metadata" "${listed_sources[@]}" -o "$output"
