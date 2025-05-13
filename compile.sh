@@ -80,7 +80,7 @@ done
 # include all sources
 include_all_sources_key=$(./getkey.sh mandatory bool include_all_sources "$config") || exit 1
 if (( include_all_sources_key == 1 )); then
-    mapfile -t listed_sources < <(find "$source_dir" -name '*.md')
+    mapfile -t listed_sources < <(find "$source_dir" -name '*.md' ! -path "$coverpage_path")
 else
     for source in "${listed_sources[@]}"; do
         (( listed_sources_set[$source] == 0 )) || {
@@ -102,7 +102,7 @@ fi
 
 {
     echo "compiling sources:"
-    echo "${listed_sources[@]}"
+    printf "%s\n" "${listed_sources[@]}"
 } >&2
 
 # compile documment
