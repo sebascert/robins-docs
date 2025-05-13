@@ -3,7 +3,7 @@
 I still don't find LaTex pleasant to use, so I created this for simple document
 generation utilities.
 
-Document compiler compiles a bunch of markdown into a given target supported by
+Document compiler compiles a bunch of markdown into a given target, supported by
 [pandoc](https://pandoc.org/).
 
 ## Dependencies
@@ -39,8 +39,8 @@ The output document will be in `out/<configured-name>`, which defaults to
 Pandoc configuration is stored in `metadata.yaml`, read the official docs on
 [pandoc metadata](https://pandoc.org/MANUAL.html#metadata-variables) for the
 available options. Change the cover contents in `src/cover.md`, read the
-[official docs](https://pandoc.org/MANUAL.html#extension-pandoc_title_block)
-for the format and options.
+[official docs](https://pandoc.org/MANUAL.html#extension-pandoc_title_block) for
+the format and options.
 
 > The table of contents is configured in `metadata.yaml`
 
@@ -60,4 +60,15 @@ sources:
 #- source1
 #- source2
 #- ...
+```
+
+## Sources Formatting
+
+[Prettier](https://prettier.io/) is used for formatting the source files, to do
+so run:
+
+> The cover page is excluded as it uses non standard markdown syntax.
+
+```bash
+find src/ -name "*.md" ! -path src/cover.md -exec prettier --write {} \;
 ```
