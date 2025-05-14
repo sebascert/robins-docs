@@ -51,7 +51,7 @@ case "$expected_type" in
     bool)
         [ "$type" == "boolean" ] || {
             echo "Config Error: key '$key' is expected to be a boolean"
-            echo "Recieved type: '$type'"
+            echo "Received type: '$type'"
             exit 1
         } >&2
         if [ "$(yq -r ".${key}" "$file")" == "false" ];then
@@ -63,7 +63,7 @@ case "$expected_type" in
     number)
         [ "$type" == "number" ] || {
             echo "Config Error: key '$key' is expected to be a number"
-            echo "Recieved type: '$type'"
+            echo "Received type: '$type'"
             exit 1
         } >&2
         yq -r ".${key}" "$file"
@@ -71,7 +71,7 @@ case "$expected_type" in
     string)
         [ "$type" == "string" ] || {
             echo "Config Error: key '$key' is expected to be a string"
-            echo "Recieved type: '$type'"
+            echo "Received type: '$type'"
             exit 1
         } >&2
         yq -r ".${key}" "$file"
@@ -79,7 +79,7 @@ case "$expected_type" in
     array)
         [ "$type" == "array" ] || {
             echo "Config Error: key '$key' is expected to be an array"
-            echo "Recieved type: '$type'"
+            echo "Received type: '$type'"
             exit 1
         } >&2
         # Output elements separated by nulls for safe reading

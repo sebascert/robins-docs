@@ -21,7 +21,7 @@ metadata="metadata.yaml"
 
 coverpage_path="$source_dir/cover.md"
 
-# missing file checks
+# Missing file checks
 [ -r "$metadata" ] || {
     echo "Error: unable to access $metadata"
     exit 1
@@ -32,16 +32,16 @@ coverpage_path="$source_dir/cover.md"
     exit 1
 } >&2
 
-# retrieve configurations
+# Retrieve configurations
 
-# output filename
+# Output filename
 output_filename=$(./getkey.sh mandatory string output_filename "$config") || exit 1
 [ -z "$output_filename" ] && {
     echo "Error: output_filename is empty"
     exit 1
 } >&2
 
-# cover page
+# Cover page
 coverpage_key=$(./getkey.sh mandatory bool cover_page "$config") || exit 1
 if (( coverpage_key == 1 )); then
     [ -r "$coverpage_path" ] || {
@@ -56,13 +56,13 @@ fi
 # sources
 mapfile -d '' -t listed_sources < <(./getkey.sh optional array sources "$config") || exit 1
 
-# append source dir to listed sources
+# Append source dir to listed sources
 for i in "${!listed_sources[@]}"; do
     source="$source_dir/${listed_sources[$i]}"
     listed_sources[i]="$source"
 done
 
-# validate listed sources
+# Validate listed sources
 declare -A listed_sources_set
 for source in "${listed_sources[@]}"; do
     [ -n "${listed_sources_set[$source]-}" ] && {
@@ -77,7 +77,7 @@ for source in "${listed_sources[@]}"; do
     listed_sources_set[$source]=0
 done
 
-# include all sources
+# Include all sources
 include_all_sources_key=$(./getkey.sh mandatory bool include_all_sources "$config") || exit 1
 if (( include_all_sources_key == 1 )); then
     mapfile -t listed_sources < <(find "$source_dir" -name '*.md' ! -path "$coverpage_path")
@@ -90,12 +90,11 @@ else
     done
 fi
 
-# insert coverpage into listed sources
+# Insert coverpage into listed sources
 [ -n "$coverpage" ] && listed_sources=("$coverpage" "${listed_sources[@]}")
 
-# status feedback
-
-[ ${#listed_sources[@]} -eq 0 ] && {
+# Status feedback
+[ "${#listed_sources[@]}" -eq 0 ] && {
     echo "nothing to do"
     exit 2
 } >&2
@@ -105,8 +104,7 @@ fi
     printf "%s\n" "${listed_sources[@]}"
 } >&2
 
-# compile documment
-
+# Compile document
 mkdir -p "$output_dir"
 
 output="$output_dir/$output_filename"
