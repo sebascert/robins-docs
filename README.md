@@ -72,3 +72,8 @@ so run:
 ```bash
 find src/ -name "*.md" ! -path src/cover.md -exec prettier --write {} \;
 ```
+
+## Contributing
+
+For bugs or requested features please contribute an issue, if you want to
+contribute code or documentation open a PR.
