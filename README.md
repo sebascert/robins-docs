@@ -100,6 +100,30 @@ git clone --depth=1 "https://github.com/sebascert/doc-compiler.git"
 rm -rf ./doc-compiler/.git
 ```
 
+### Tags
+
+When you fork the repo you may want to keep this repo as a remote to upgrade to
+new versions, to do so add it as the `upstream` remote in your local clone:
+
+```bash
+# on your doc-compiler-fork clone
+git remote add upstream https://github.com/sebascert/doc-compiler.git
+```
+
+Another usefull tip is to take advantage of the `git refspec`, and prefix the
+Document Compiler tags with `doc-compiler/` (as git prefix branches from a
+remote with `remote/`), for configuring this, edit the `[remote "upstream"]`
+section in your `.git/config` with:
+
+```ini
+# DO NOT actually comment your url or +fetch/heads/ lines
+[remote "upstream"]
+#	url = https://github.com/sebascert/doc-compiler.git
+#	fetch = +refs/heads/*:refs/remotes/upstream/*
+	fetch = +refs/tags/*:refs/tags/doc-compiler/*
+	tagopt = --no-tags
+```
+
 ## Contributing
 
 For bugs or requested features please contribute an issue, if you want to
