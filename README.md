@@ -3,7 +3,7 @@
 I still don't find LaTex pleasant to use, so I created this for simple document
 generation utilities.
 
-Document compiler compiles a bunch of markdown into a given target, supported by
+Document Compiler compiles a bunch of markdown into a given target, supported by
 [pandoc](https://pandoc.org/).
 
 ## Dependencies
@@ -13,17 +13,10 @@ Document Compiler requires [pandoc](https://pandoc.org/installing.html) and
 
 ## How to use
 
-Clone the repo:
-
-```bash
-your_doc=<your document>
-git clone https://github.com/sebascert/doc-compiler.git "$your_doc"
-cd "$your_doc"
-git checkout --orphan doc
-git commit -am "init"
-```
-
-Add your document contents to `src/` in markdown files, then compile with:
+There are several ways to use this project depending on your
+[version control needs](#version-control-workflows). After choosing a version
+control workflow, add your document contents to `src/` in markdown files, then
+compile your document with:
 
 ```bash
 ./compile.sh
@@ -71,6 +64,40 @@ so run:
 
 ```bash
 find src/ -name "*.md" ! -path src/cover.md -exec prettier --write {} \;
+```
+
+## Version Control Workflows
+
+### GitHub Fork
+
+The simplest way to use Document Compiler with version control is to
+[fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks)
+this repo, this gives you an identical copy of this repo, under your GitHub
+account.
+
+### Within a Git Repo
+
+A common scenario is wanting to track the documentation for a project. The
+straightforward approach is to discard the history of this repo, and just commit
+the project files into your project history. However, this becomes problematic
+when you need to upgrade to a different version of Document Compiler.
+
+A better solution is to use `git submodules`, with them you can manage the
+history of both your project and doc-compiler simultaneously by
+[forking](#github-fork) this repo and then using it as a submodule of your
+project.
+
+> If you're not familiar with them, I highly recommend reading this
+> [guide](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+
+### Discard Version Control
+
+If you wish to discard version control (discouraged), simply download the repo
+contents and remove the git database:
+
+```bash
+git clone --depth=1 "https://github.com/sebascert/doc-compiler.git"
+rm -rf ./doc-compiler/.git
 ```
 
 ## Contributing
