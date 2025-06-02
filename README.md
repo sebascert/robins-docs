@@ -8,8 +8,10 @@ Document Compiler compiles a bunch of markdown into a given target, supported by
 
 ## Dependencies
 
-Document Compiler requires [pandoc](https://pandoc.org/installing.html) and
-[yq](https://github.com/mikefarah/yq/#install).
+Document Compiler requires:
+
+- [pandoc 3.x](https://pandoc.org/installing.html).
+- [yq 4.x](https://github.com/mikefarah/yq/#install).
 
 ## How to use
 
@@ -110,7 +112,7 @@ new versions, to do so add it as the `upstream` remote in your local clone:
 git remote add upstream https://github.com/sebascert/doc-compiler.git
 ```
 
-Another usefull tip is to take advantage of the `git refspec`, and prefix the
+Another useful tip is to take advantage of the `git refspec`, and prefix the
 Document Compiler tags with `doc-compiler/` (as git prefix branches from a
 remote with `remote/`), for configuring this, edit the `[remote "upstream"]`
 section in your `.git/config` with:

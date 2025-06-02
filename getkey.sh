@@ -35,7 +35,7 @@ case "$optional_str" in
         ;;
 esac
 
-type=$(yq -r ".${key} | type" "$file")
+type="$(yq -r ".${key} | type" "$file")"
 
 # Handle missing key
 if [ "$type" == "null" ]; then
@@ -49,7 +49,7 @@ fi
 # Type check and output
 case "$expected_type" in
     bool)
-        [ "$type" == "boolean" ] || {
+        [ "$type" == "!!bool" ] || {
             echo "Config Error: key '$key' is expected to be a boolean"
             echo "Received type: '$type'"
             exit 1
@@ -61,7 +61,7 @@ case "$expected_type" in
         fi
         ;;
     number)
-        [ "$type" == "number" ] || {
+        [ "$type" == "!!int" ] || [ "$type" == "!!float" ] || {
             echo "Config Error: key '$key' is expected to be a number"
             echo "Received type: '$type'"
             exit 1
@@ -69,7 +69,7 @@ case "$expected_type" in
         yq -r ".${key}" "$file"
         ;;
     string)
-        [ "$type" == "string" ] || {
+        [ "$type" == "!!str" ] || {
             echo "Config Error: key '$key' is expected to be a string"
             echo "Received type: '$type'"
             exit 1
@@ -77,7 +77,7 @@ case "$expected_type" in
         yq -r ".${key}" "$file"
         ;;
     array)
-        [ "$type" == "array" ] || {
+        [ "$type" == "!!seq" ] || [ "$type" == "!!null" ] || {
             echo "Config Error: key '$key' is expected to be an array"
             echo "Received type: '$type'"
             exit 1

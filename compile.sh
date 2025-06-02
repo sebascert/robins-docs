@@ -43,7 +43,7 @@ output_filename=$(./getkey.sh mandatory string output_filename "$config") || exi
 
 # Cover page
 coverpage_key=$(./getkey.sh mandatory bool cover_page "$config") || exit 1
-if (( coverpage_key == 1 )); then
+if [ "$coverpage_key" -eq 1 ]; then
     [ -r "$coverpage_path" ] || {
         echo "Error: unable to access $coverpage_path"
         exit 1
@@ -54,7 +54,11 @@ else
 fi
 
 # sources
-mapfile -d '' -t listed_sources < <(./getkey.sh optional array sources "$config") || exit 1
+if ./getkey.sh optional array sources "$config" | mapfile -d '' -t listed_sources; then
+    :
+else
+    exit 1
+fi
 
 # Append source dir to listed sources
 for i in "${!listed_sources[@]}"; do
@@ -65,25 +69,26 @@ done
 # Validate listed sources
 declare -A listed_sources_set
 for source in "${listed_sources[@]}"; do
-    [ -n "${listed_sources_set[$source]-}" ] && {
+    [ -n "${listed_sources_set["$source"]-}" ] && {
         echo "Warning: repeated listed source '$source'"
         continue
     }
     [ -r "$source" ] || {
         echo "Warning: unable to access listed source '$source'"
-        listed_sources_set[$source]=1
+        listed_sources_set["$source"]=1
         continue
     } >&2
-    listed_sources_set[$source]=0
+    listed_sources_set["$source"]=0
 done
 
 # Include all sources
 include_all_sources_key=$(./getkey.sh mandatory bool include_all_sources "$config") || exit 1
-if (( include_all_sources_key == 1 )); then
-    mapfile -t listed_sources < <(find "$source_dir" -name '*.md' ! -path "$coverpage_path")
+if [ "$include_all_sources_key" -eq 1 ]; then
+    # shellcheck disable=SC2207
+    listed_sources=($(find "$source_dir" -name '*.md' ! -path "$coverpage_path"))
 else
     for source in "${listed_sources[@]}"; do
-        (( listed_sources_set[$source] == 0 )) || {
+        [ "${listed_sources_set["$source"]}" -eq 0 ] || {
             echo "Error: unable to access listed source '$source'"
             exit 1
         } >&2
