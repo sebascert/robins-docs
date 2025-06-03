@@ -2,33 +2,39 @@
 
 ## Descripción del problema
 
-El objetivo de este proyecto es construir un **Analizador Léxico** usando **Flex (Lex)** que pueda procesar y tokenizar palabras y cadenas de texto específicas para transformar una instrucción en lenguaje natural en varios tokens, que después serán usados para traducir dichas instrucciones a lenguaje ensamblador.
+Crear un **Analizador Léxico** usando **Flex
+(Lex)** que pueda procesar y tokenizar palabras y cadenas de texto específicas
+para transformar una instrucción en lenguaje natural en varios tokens, que
+después serán usados para traducir dichas instrucciones a lenguaje ensamblador.
 
-Por ejemplo, si el usuario escribe "Robot, please move 5 blocks.", este analizador léxico convertirá esta instrucción en tokens, y se vería de la siguiente manera: [NOUN], [POLITE_WORDS], [INS_MOVE_VERB], [INT_L], [ARG_BLOCKS_UNIT]
+Por ejemplo, si el usuario escribe "Robot, please move 5 blocks.", este
+analizador léxico convertirá esta instrucción en tokens, y se vería de la
+siguiente manera: [NOUN], [POLITE_WORDS], [INS_MOVE_VERB], [INT_L],
+[ARG_BLOCKS_UNIT]
 
 ---
 
 ## Definición de los TOKENS
 
-**NOUN:** "Robot", "robot 
+**NOUN:** "Robot", "robot
 
-**POLITE_WORDS:** "please", "would you please"  
+**POLITE_WORDS:** "please", "would you please"
 
-**INS_CONJUNCTION:** ", and then", ", then"  
+**INS_CONJUNCTION:** ", and then", ", then"
 
-**INS_ROTATE_VERB:** "rotate"  
+**INS_ROTATE_VERB:** "rotate"
 
-**INS_MOVE_VERB:** "move"  
+**INS_MOVE_VERB:** "move"
 
-**ARG_DEGREES_UNIT:** "deg"  
+**ARG_DEGREES_UNIT:** "deg"
 
-**ARG_BLOCKS_UNIT:** "blocks"  
+**ARG_BLOCKS_UNIT:** "blocks"
 
 **INT_L:** Cualquier número entero, como 5, 10, 7
 
 **REAL_L:** Cualquier número decimal, como 2.5, 0.5
 
-**Operadores:** "+", "-", "*", "/", "(", ")"  
+**Operadores:** "+", "-", "\*", "/", "(", ")"
 
 **. (punto):** "." para terminar las instrucciones
 
@@ -47,7 +53,8 @@ Por ejemplo, si el usuario escribe "Robot, please move 5 blocks.", este analizad
 ### Invalid Input Examples
 
 1. `Run over 3 blocks.` → "Run over" no es un token válido
-2. `Rotate ninety degrees.` → "ninety" no es un token válido porque solo acepta números 
+2. `Rotate ninety degrees.` → "ninety" no es un token válido porque solo acepta
+   números
 3. `Robot move.` → Falta deg o blocks, es una instrucción incompleta
 4. `Please.` → Instrucción incompleta
 5. `10 blocks walk.` → Están en desorden, por lo que no es válido
