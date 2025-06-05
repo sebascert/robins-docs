@@ -44,14 +44,6 @@ num_literal → INT_L
             | REAL_L
 ```
 
-**Nota:** Las reglas específicas de instrucciones (`move`, `rotate`, etc.) y argumentos (`blocks`, `degrees`) están definidas dentro de los macros:
-
-- `ROBINS_INS_GRAMMAR_RULE_STRUCTURE()`
-- `ROBINS_INS_GRAMMAR_RULES()`
-- `ROBINS_ARG_GRAMMAR_RULES()`
-
-Estas incluyen el manejo opcional de `POLITE_WORDS`, así como expresiones aritméticas en los argumentos.
-
 ### TOKENS
 
 **NOUN, POLITE_WORDS, INS_CONJUNCTION, INS_ROTATE_VERB, INS_MOVE_VERB, ARG_DEGREES_UNIT, ARG_BLOCKS_UNIT, INT_L, REAL_L, Operadores, . (punto)**

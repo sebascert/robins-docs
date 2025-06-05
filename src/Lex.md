@@ -39,22 +39,6 @@ siguiente manera: NOUN, POLITE_WORDS, INS_MOVE_VERB, INT_L, ARG_BLOCKS_UNIT
 
 ---
 
----
-
-## Notas aclaratorias
-
-- Las palabras y frases entre comillas como `"please"`, `"robot"`, `"blocks"`, `"deg"` y otras similares están definidas mediante macros en el archivo `lexer.l.m4`, específicamente:
-
-  - `ROBINS_NOUN_LEXEMAS()`
-  - `ROBINS_POLITE_WORDS_LEXEMAS()`
-  - `ROBINS_INS_VERB_LEXEMAS()`
-  - `ROBINS_ARG_UNIT_LEXEMAS()`
-
-- Las conjunciones válidas como `", and then"` y `", then"` son detectadas explícitamente por el lexer. Palabras como `"and"` por sí solas **no** son tokens válidos.
-
-- El punto final `"."` se reconoce como token separado (`.`) y es obligatorio para indicar el final de una instrucción.
-
----
 
 ## Input Examples
 
