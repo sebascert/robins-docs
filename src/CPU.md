@@ -1,29 +1,29 @@
-# Robins CPU
-This simple Vite + React website shows an 8x8 grid, takes our compiled CPU instructions as a .txt file and moves our robot on the grid accordingly!
+# CPU de Robins
+Este sencillo sitio web hecho con Vite + React muestra una cuadrícula de 8x8, toma nuestras instrucciones compiladas de la CPU desde un archivo .txt y mueve a nuestro robot en la cuadrícula de acuerdo con ellas.
 
-[Github Repository](https://github.com/DaifMX/ITESM_TC2037_Robins_React)
+[Repositorio de Github](https://github.com/DaifMX/ITESM_TC2037_Robins_React)
 
-Our CPU works based on the following DFA (Deterministic Finite Automata):
-![Graphviz Diagram](src/graphviz.svg 'Graphviz Diagram')
+Nuestra CPU funciona con base en el siguiente AFD (Autómata Finito Determinista):  
+![Diagrama de Graphviz](src/graphviz.svg 'Diagrama de Graphviz')
 
-## Getting Started
-Before compiling, please, make sure to have the latest LTS version of Node.JS installed on your machine.
+## Primeros Pasos
+Antes de compilar, por favor asegúrate de tener instalada la última versión LTS de Node.JS en tu máquina.
 
-Then choose one of the running modes:
-- [Robins CPU](#robins-cpu)
-  - [Getting Started](#getting-started)
-  - [Standard Compile](#standard-compile)
-  - [Developer Mode](#developer-mode)
+Luego elige uno de los modos de ejecución:
+- [CPU de Robins](#cpu-de-robins)
+  - [Primeros Pasos](#primeros-pasos)
+  - [Compilacion Estandar](#compilacion-estandar)
+  - [Modo Desarrollador](#modo-desarrollador)
 
-## Standard Compile
-To compile, please clone this repository on your machine and then run the following commands on the root of the project:
+## Compilacion Estandar
+Para compilar, clona este repositorio en tu máquina y ejecuta los siguientes comandos desde la raíz del proyecto:
 ```
 npm i
 npm run build
 ```
 
-## Developer Mode
-If you wish to run this project on developer mode run:
+## Modo Desarrollador
+Si deseas ejecutar este proyecto en modo desarrollador, ejecuta:
 ```
 npm i
 npm run dev
