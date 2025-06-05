@@ -68,7 +68,7 @@ Estas incluyen el manejo opcional de `POLITE_WORDS`, así como expresiones aritm
 
 3. `Robot please move 5 blocks.` -> Uso del token POLITE_WORDS antes de ins_move.
 
-4. `Robot would you please rotate 180 deg.` -> Variante de cortesía seguida de ins_rotate.
+4. `Robot would you please rotate 180 deg.` -> Variante de POLITE_WORDS seguida de ins_rotate.
 
 5. `Robot move 2 blocks , then rotate 90 deg.` -> Dos instrucciones compuestas usando INS_CONJUNCTION.
 
